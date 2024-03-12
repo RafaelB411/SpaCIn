@@ -19,21 +19,39 @@ def main():
 
     fd = os.open(sys.argv[1], os.O_RDWR)
 
-    # data to write
-    data = 0x40404079;
+    # led vermelho
+    data = 0x00000000;
+    ioctl(fd, WR_RED_LEDS)
+    retval = os.write(fd, data.to_bytes(4, 'little'))
+    print("ledr: %d bytes"%retval)
+
+    # led verde
+    data = 0x00000000;
+    ioctl(fd, WR_GREEN_LEDS)
+    retval = os.write(fd, data.to_bytes(4, 'little'))
+    print("ledg: %d bytes"%retval)
+
+    # display grudado
+    data = 0x40404040;
     ioctl(fd, WR_R_DISPLAY)
     retval = os.write(fd, data.to_bytes(4, 'little'))
-    print("wrote %d bytes"%retval)
+    print("display2: %d bytes"%retval)
 
-    # data to write
-    data = 0x79404040;
+    # display separado
+    data = 0x40404040;
     ioctl(fd, WR_L_DISPLAY)
     retval = os.write(fd, data.to_bytes(4, 'little'))
-    print("wrote %d bytes"%retval)
+    print("display1: %d bytes"%retval)
 
+    # botao
     ioctl(fd, RD_PBUTTONS)
     red = os.read(fd, 4); # read 4 bytes and store in red var
-    print("red 0x%X"%int.from_bytes(red, 'little'))
+    print("botoes: 0x%X"%int.from_bytes(red, 'little'))
+
+    # switch
+    ioctl(fd, RD_SWITCHES)
+    red = os.read(fd, 4);
+    print("switches: 0x%X"%int.from_bytes(red, 'little'))
 
     os.close(fd)
 
