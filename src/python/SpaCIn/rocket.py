@@ -36,8 +36,10 @@ class Rocket(pygame.sprite.Sprite):
         super().__init__(*groups)
 
         self.image = pygame.image.load("sprites/Rocket/Rocket_FULL.png")
-        self.image = pygame.transform.scale(self.image, [50, 250])
-        self.rect = pygame.Rect([INITIAL_X, INITIAL_Y, 50, 250])
+        width, height = self.image.get_size()
+        self.image = pygame.transform.scale(self.image, [width//2, height//2])
+        #self.image = pygame.transform.scale(self.image, [50, 250])
+        self.rect = pygame.Rect([INITIAL_X, INITIAL_Y, width//2, height//2])
         self.switchs = [True]*NUM_SWITCH
         self.state_foguete = 0
         self.status = True
@@ -46,12 +48,17 @@ class Rocket(pygame.sprite.Sprite):
     def set_foguete(self):
         self.check_switch()      
         if self.state_foguete == 1:
-            self.image = pygame.image.load("sprites/Rocket/Rocket1.png")          
+            self.image = pygame.image.load("sprites/Rocket/Rocket1.png")
+            width, height = self.image.get_size()            
         elif self.state_foguete == 2:
-            self.image = pygame.image.load("sprites/Rocket/Rocket2.png")           
+            self.image = pygame.image.load("sprites/Rocket/Rocket2.png")
+            width, height = self.image.get_size()               
         elif self.state_foguete == 3:
            self.image = pygame.image.load("sprites/Rocket/Rocket3.png")
-        self.image = pygame.transform.scale(self.image, [50, 250])
+           width, height = self.image.get_size()
+        self.image = pygame.transform.scale(self.image, [width//2, height//2])
+        self.rect.height = height//2
+        self.rect.width = width // 2
     
     def check_switch(self):
 
