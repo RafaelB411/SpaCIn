@@ -11,3 +11,9 @@ __pycache__/
 *.mod
 *.o
 *.order
+
+# quartus
+/map/pcihello_restored/.qsys_edit
+/map/pcihello_restored/db
+/map/pcihello_restored/incremental_db
+/map/pcihello_restored/pcihellocore/synthesis/submodules
