@@ -58,6 +58,7 @@ def draw_fuel(surface, color, x, y, width, height, segments, time_elapsed):
     segment_width = width // segments
     for i in range(segments):
         if i < (time_elapsed // 10):
+            led_fuel()
             pygame.draw.rect(surface, MIDNIGHT_BLUE, (x + i * segment_width, y, segment_width, height), 0)
         else:
             pygame.draw.rect(surface, color, (x + i * segment_width, y, segment_width, height), 0)
