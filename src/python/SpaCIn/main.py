@@ -3,12 +3,12 @@ import pygame
 import random
 import sys
 
-from background import SIZE_WINDOW_X, WHITE, MIDNIGHT_BLUE , FONTE_DEFAULT, contagem_regressiva, draw, draw_fuel, draw_score, draw_stars, menu, update_stars, setDisplay, GAMEOVER
+from background import SIZE_WINDOW_X, WHITE, MIDNIGHT_BLUE , FONTE_DEFAULT, contagem_regressiva, draw, draw_fuel, draw_score, draw_stars, menu, update_stars, setDisplay
 from rocket import Rocket
 from trash import LixoEspacial
 from gameOver import GameOver
 from rocket_falling import Falling
-      
+ 
 def main():
     FPS = 60
 
@@ -22,6 +22,7 @@ def main():
 
     gameloop = True
     gameStart = False
+    gameOver = False
     time_elapsed = 0
     notPressBotom = True    
     cache_level = 0
@@ -33,7 +34,7 @@ def main():
         #time_elapsed = pygame.time.get_ticks() / 1000  # Tempo decorrido em segundos
 
         for event in pygame.event.get():
-            if event.type == pygame.QUIT and gameStart: ## se está no jogo e aperta em sair
+            if event.type == pygame.QUIT: ## se está no jogo e aperta em sair
                 gameloop = False
                 pygame.quit()
             if event.type == pygame.KEYDOWN:
