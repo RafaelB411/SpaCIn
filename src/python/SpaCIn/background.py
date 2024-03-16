@@ -2,8 +2,6 @@ import math
 import pygame
 import random
 
-from rocket import Rocket
-
 # Definições
 FONTE_DEFAULT = "Fonts/GamegirlClassic.ttf"
 WHITE = (255, 255, 255)
