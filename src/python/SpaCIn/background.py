@@ -2,16 +2,16 @@ import math
 import pygame
 import random
 
-from rocket import Rocket, led_fuel
+from rocket import led_fuel 
 
 # Definições
 FONTE_DEFAULT = "Fonts/GamegirlClassic.ttf"
 WHITE = (255, 255, 255)
-MIDNIGHT_BLUE = (25, 25, 112)
+MIDNIGHT_BLUE = (0, 0, 0)
 NUM_STARS = 100
 # Tela
-SIZE_WINDOW_X = 1820
-SIZE_WINDOW_Y = 960
+SIZE_WINDOW_X = 1280
+SIZE_WINDOW_Y = 640
 
 leds = [True] * 18
 
@@ -60,7 +60,7 @@ def draw_fuel(surface, color, x, y, width, height, segments, time_elapsed):
     segment_width = width // segments
     for i in range(segments):
         led_index = segments - i - 1
-        if i < (time_elapsed // 10): 
+        if i < (time_elapsed // 3): 
             if leds[led_index]:
                 leds[led_index] = False
                 led_fuel(led_index)
@@ -96,6 +96,14 @@ def contagem_regressiva():
         pygame.display.flip()
         draw()
         pygame.time.wait(1000)  # Espera 1 segundo
+
+# Função para desenhar a pontuação na tela
+def draw_score(surface, pontuacao, x, y):
+    texto_pontuacao = fonte_combustivel.render(f'Pontuação: {pontuacao:.2f}', True, WHITE)
+    texto_pontuacao_retangulo = texto_pontuacao.get_rect(center=(x, y))
+    surface.blit(texto_pontuacao, texto_pontuacao_retangulo)
+
+
 
 # Funcao que desenha o menu inicial 
 def menu():
