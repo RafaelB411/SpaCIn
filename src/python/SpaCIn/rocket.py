@@ -3,6 +3,7 @@ import pygame
 
 import os, sys
 from fcntl import ioctl
+from rocket_falling import Falling
 
 # ioctl commands defined at the pci driver
 RD_SWITCHES   = 24929
@@ -43,13 +44,16 @@ class Rocket(pygame.sprite.Sprite):
         self.switchs = [True]*NUM_SWITCH
         self.state_foguete = 0
         self.status = True
-
+        self.level = [0,0,0]
 
     def set_foguete(self):
-        self.check_switch()      
+        self.check_switch()
+        width = 0
+        height = 0
+
         if self.state_foguete == 1:
             self.image = pygame.image.load("sprites/Rocket/Rocket1.png")
-            width, height = self.image.get_size()            
+            width, height = self.image.get_size()
         elif self.state_foguete == 2:
             self.image = pygame.image.load("sprites/Rocket/Rocket2.png")
             width, height = self.image.get_size()               
@@ -59,6 +63,7 @@ class Rocket(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, [width//2, height//2])
         self.rect.height = height//2
         self.rect.width = width // 2
+        self.level = [self.state_foguete , self.rect.x, self.rect.y + height//2]
     
     def check_switch(self):
 
@@ -72,12 +77,12 @@ class Rocket(pygame.sprite.Sprite):
 
         #print(primeira_ocorrencia_True)       
         if primeira_ocorrencia_True == NUM_SWITCH_STATE_1:
-            self.state_foguete = 1           
+            self.state_foguete = 1          
         elif primeira_ocorrencia_True == NUM_SWITCH_STATE_2:
             self.state_foguete = 2         
         elif primeira_ocorrencia_True == NUM_SWITCH_STATE_3:
             self.state_foguete = 3          
-        elif press_botao != 0:
+        elif primeira_ocorrencia_True < 0 and self.state_foguete != 0:
             self.status = False
             print("Foguete Explodiu!")       
             
