@@ -30,12 +30,17 @@ INITIAL_Y = 150
 
 fd = os.open(sys.argv[1], os.O_RDWR)
 all_leds_on = 0xFFFFF
+ioctl(fd, WR_RED_LEDS)
+leds = os.write(fd, all_leds_on.to_bytes(4, 'little'))
 
-def led_fuel():
+def led_fuel(num_led):
+    global all_leds_on
     ioctl(fd, WR_RED_LEDS)
+    
+    num_led = 1 << num_led
+    all_leds_on = all_leds_on ^ num_led
     leds = os.write(fd, all_leds_on.to_bytes(4, 'little'))
-    all_leds_on -= 1
-
+    
 
 class Rocket(pygame.sprite.Sprite):
 
@@ -89,7 +94,6 @@ class Rocket(pygame.sprite.Sprite):
             print("Foguete Explodiu!")       
             
     def update(self, *args):
-        led_fuel()
 
         keys = pygame.key.get_pressed() #Array de Bool 
 

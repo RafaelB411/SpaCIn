@@ -2,7 +2,7 @@ import math
 import pygame
 import random
 
-from rocket import Rocket
+from rocket import Rocket, led_fuel
 
 # Definições
 FONTE_DEFAULT = "Fonts/GamegirlClassic.ttf"
@@ -10,8 +10,10 @@ WHITE = (255, 255, 255)
 MIDNIGHT_BLUE = (25, 25, 112)
 NUM_STARS = 100
 # Tela
-SIZE_WINDOW_X = 840
-SIZE_WINDOW_Y = 480
+SIZE_WINDOW_X = 1820
+SIZE_WINDOW_Y = 960
+
+leds = [True] * 18
 
 pygame.init()
 
@@ -57,8 +59,11 @@ def draw():
 def draw_fuel(surface, color, x, y, width, height, segments, time_elapsed):
     segment_width = width // segments
     for i in range(segments):
-        if i < (time_elapsed // 10):
-            led_fuel()
+        led_index = segments - i - 1
+        if i < (time_elapsed // 10): 
+            if leds[led_index]:
+                leds[led_index] = False
+                led_fuel(led_index)
             pygame.draw.rect(surface, MIDNIGHT_BLUE, (x + i * segment_width, y, segment_width, height), 0)
         else:
             pygame.draw.rect(surface, color, (x + i * segment_width, y, segment_width, height), 0)
