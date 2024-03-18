@@ -47,6 +47,6 @@ class GameOver(pygame.sprite.Sprite):
                     return False
                 if self.button_rect_out.collidepoint(event.pos):
                     pygame.quit()
-            if event.type == pygame.QUIT: 
+            if event.type == pygame.QUIT:
                 pygame.quit()
         return True

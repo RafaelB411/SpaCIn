@@ -29,12 +29,30 @@ NUM_SWITCH_STATE_3 = 2
 INITIAL_X = 370
 INITIAL_Y = 150
 
+SIZE_WINDOW_X = 1280
+
 fd = os.open(sys.argv[1], os.O_RDWR)
+all_leds_on = 0xFFFFF
+ioctl(fd, WR_RED_LEDS)
+leds = os.write(fd, all_leds_on.to_bytes(4, 'little'))
+
+def led_fuel(num_led):
+    global all_leds_on
+    ioctl(fd, WR_RED_LEDS)
+    
+    num_led = 1 << num_led
+    all_leds_on = all_leds_on ^ num_led
+    leds = os.write(fd, all_leds_on.to_bytes(4, 'little'))
+    
 
 class Rocket(pygame.sprite.Sprite):
 
     def __init__(self, *groups):
         super().__init__(*groups)
+
+        all_leds_on = 0xFFFFF
+        ioctl(fd, WR_RED_LEDS)
+        leds = os.write(fd, all_leds_on.to_bytes(4, 'little'))
 
         self.image = pygame.image.load("sprites/Rocket/Rocket_FULL.png")
         width, height = self.image.get_size()
@@ -43,7 +61,8 @@ class Rocket(pygame.sprite.Sprite):
         self.rect = pygame.Rect([INITIAL_X, INITIAL_Y, width//2, height//2])
         self.switchs = [True]*NUM_SWITCH
         self.state_foguete = 0
-        self.status = True
+        self.status = False
+        self.end = False
         self.level = [0,0,0]
 
     def set_foguete(self):
@@ -82,9 +101,8 @@ class Rocket(pygame.sprite.Sprite):
             self.state_foguete = 2         
         elif primeira_ocorrencia_True == NUM_SWITCH_STATE_3:
             self.state_foguete = 3          
-        elif primeira_ocorrencia_True < 0 and self.state_foguete != 0:
-            self.status = False
-            print("Foguete Explodiu!")       
+        else:
+            self.status = True    
             
     def update(self, *args):
 
@@ -107,8 +125,8 @@ class Rocket(pygame.sprite.Sprite):
         # limites de Tela 
         if self.rect.x < 0:
             self.rect.x = 0
-        elif (self.rect.x + self.rect.width) > 840:
-            self.rect.x = 840 - self.rect.width
+        elif (self.rect.x + self.rect.width) > SIZE_WINDOW_X:
+            self.rect.x = SIZE_WINDOW_X - self.rect.width
 
         # intera��o switch
         # somente para testes, na versao final deve usar o vetor vindo do driver
@@ -116,9 +134,9 @@ class Rocket(pygame.sprite.Sprite):
             self.switchs[0] = False
         elif switch_value == EJETA_PROP_2:
             self.switchs[1] = False
-        elif switch_value == EJETA_PROP_3:
+        elif switch_value == EJETA_PROP_3 and press_botao == UPDATE_FOGAO:
             self.switchs[2] = False
-
+            self.end = True
 
         if press_botao == UPDATE_FOGAO:
             self.set_foguete()
