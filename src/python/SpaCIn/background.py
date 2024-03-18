@@ -4,6 +4,9 @@ import random
 
 from rocket import led_fuel 
 
+import os, sys
+from fcntl import ioctl
+
 # Definições
 FONTE_DEFAULT = "Fonts/GamegirlClassic.ttf"
 WHITE = (255, 255, 255)
@@ -12,6 +15,10 @@ NUM_STARS = 100
 # Tela
 SIZE_WINDOW_X = 1280
 SIZE_WINDOW_Y = 640
+
+WR_L_DISPLAY  = 24931
+WR_RED_LEDS   = 24933
+WR_GREEN_LEDS = 24934
 
 leds = [True] * 18
 
@@ -30,6 +37,59 @@ def setDisplay():
     return pygame.display.set_mode([SIZE_WINDOW_X, SIZE_WINDOW_Y])
 
 display = setDisplay()
+
+def set_display_segmentos(i):
+    fd = os.open(sys.argv[1], os.O_RDWR)
+    ioctl(fd, WR_L_DISPLAY)
+    if i == 0:
+        data = 0x40404040;
+        os.write(fd, data.to_bytes(4, 'little'))
+    elif i == 1:
+        data = 0x40794079;
+        os.write(fd, data.to_bytes(4, 'little'))
+    elif i == 2:
+        data = 0x40244024;
+        os.write(fd, data.to_bytes(4, 'little'))
+    elif i == 3:
+        data = 0x40304030;
+        os.write(fd, data.to_bytes(4, 'little'))
+    elif i == 4:
+        data = 0x40194019;
+        os.write(fd, data.to_bytes(4, 'little'))
+    elif i == 5:
+        data = 0x40124012;
+        os.write(fd, data.to_bytes(4, 'little'))
+    elif i == 6:
+        data = 0x40024002;
+        os.write(fd, data.to_bytes(4, 'little'))
+    elif i == 7:
+        data = 0x40784078;
+        os.write(fd, data.to_bytes(4, 'little'))
+    elif i == 8:
+        data = 0x40004000;
+        os.write(fd, data.to_bytes(4, 'little'))
+    elif i == 9:
+        data = 0x40204020;
+        os.write(fd, data.to_bytes(4, 'little'))
+
+def set_leds_g(i):
+    fd = os.open(sys.argv[1], os.O_RDWR)
+    ioctl(fd, WR_GREEN_LEDS)
+    if i == 0:
+        data = 0x00000100;
+        os.write(fd, data.to_bytes(4, 'little'))
+    elif i == 1:
+        data = 0x000000FF;
+        os.write(fd, data.to_bytes(4, 'little'))
+    elif i == 2:
+        data = 0x0000003F;
+        os.write(fd, data.to_bytes(4, 'little'))
+    elif i == 3:
+        data = 0x0000000F;
+        os.write(fd, data.to_bytes(4, 'little'))
+    elif i == 4:
+        data = 0x00000003;
+        os.write(fd, data.to_bytes(4, 'little'))
 
 # Funcao que desenha as estrelas
 def draw_stars(surface):
@@ -86,10 +146,12 @@ def draw_circle(angulo):
 
 #Funcao que desenha contagem Regressiva
 def contagem_regressiva():
-    for i in range(3, 0, -1):
-        angulo = i * 36
+    for i in range(4, 0, -1):
+        angulo = i * 90
         draw()
         draw_circle(angulo)
+        set_display_segmentos(i)
+        set_leds_g(i)
         texto = fonte.render(str(i), True, (255, 255, 255))
         texto_retangulo = texto.get_rect(center=(SIZE_WINDOW_X // 2, SIZE_WINDOW_Y // 2))
         display.blit(texto, texto_retangulo)
