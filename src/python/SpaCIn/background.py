@@ -17,6 +17,7 @@ SIZE_WINDOW_X = 1280
 SIZE_WINDOW_Y = 640
 
 WR_L_DISPLAY  = 24931
+WR_R_DISPLAY  = 24932
 WR_RED_LEDS   = 24933
 WR_GREEN_LEDS = 24934
 
@@ -71,6 +72,41 @@ def set_display_segmentos(i):
     elif i == 9:
         data = 0x40204020;
         os.write(fd, data.to_bytes(4, 'little'))
+
+#pontuacao na tela 
+def set_display_segmentos_right(i):
+        fd = os.open(sys.argv[1], os.O_RDWR)
+        ioctl(fd, WR_R_DISPLAY)
+        if i == 0:
+            data = 0x40404040;
+            os.write(fd, data.to_bytes(4, 'little'))
+        elif i == 1:
+            data = 0x40794079;
+            os.write(fd, data.to_bytes(4, 'little'))
+        elif i == 2:
+            data = 0x40244024;
+            os.write(fd, data.to_bytes(4, 'little'))
+        elif i == 3:
+            data = 0x40304030;
+            os.write(fd, data.to_bytes(4, 'little'))
+        elif i == 4:
+            data = 0x40194019;
+            os.write(fd, data.to_bytes(4, 'little'))
+        elif i == 5:
+            data = 0x40124012;
+            os.write(fd, data.to_bytes(4, 'little'))
+        elif i == 6:
+            data = 0x40024002;
+            os.write(fd, data.to_bytes(4, 'little'))
+        elif i == 7:
+            data = 0x40784078;
+            os.write(fd, data.to_bytes(4, 'little'))
+        elif i == 8:
+            data = 0x40004000;
+            os.write(fd, data.to_bytes(4, 'little'))
+        elif i == 9:
+            data = 0x40204020;
+            os.write(fd, data.to_bytes(4, 'little'))
 
 def set_leds_g(i):
     fd = os.open(sys.argv[1], os.O_RDWR)
@@ -161,6 +197,8 @@ def contagem_regressiva():
 
 # Função para desenhar a pontuação na tela
 def draw_score(surface, pontuacao, x, y):
+    #ajuste pontuacao na tela 
+    set_display_segmentos_right(pontuacao)
     texto_pontuacao = fonte_combustivel.render(f'Pontuação: {pontuacao:.2f}', True, WHITE)
     texto_pontuacao_retangulo = texto_pontuacao.get_rect(center=(x, y))
     surface.blit(texto_pontuacao, texto_pontuacao_retangulo)
