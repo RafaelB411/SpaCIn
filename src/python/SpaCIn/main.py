@@ -25,6 +25,7 @@ def main():
     gameOver = False
     game_win = False
     time_elapsed = 0
+    fator_pontuacao = 0.1
     notPressBotom = True    
     cache_level = 0
     last_trash_time = 0  # Variável para rastrear o tempo desde a última geração de lixo espacial
@@ -63,7 +64,9 @@ def main():
             drawGroup.update()
             drawGroup.draw(display)
             time_elapsed += 1 / 60 
+            pontuacao = time_elapsed * (fator_pontuacao + time_elapsed / 100)
             draw_fuel(display, WHITE, SIZE_WINDOW_X - 200, 50, 180, 50, 18, time_elapsed)
+            draw_score(display, pontuacao, SIZE_WINDOW_X - 200 + 90, 120)
 
             # Verificar se é hora de adicionar um novo lixo espacial
             current_time = pygame.time.get_ticks() / 1000
