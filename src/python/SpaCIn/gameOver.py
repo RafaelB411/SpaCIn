@@ -1,6 +1,7 @@
 
-from background import WHITE
+from background import WHITE, SIZE_WINDOW_Y, SIZE_WINDOW_X, draw_stars
 import pygame
+
 
 # pygame.quit() => termina a execução
 
@@ -13,18 +14,19 @@ class GameOver(pygame.sprite.Sprite):
         self.display.fill(color)
         fonte_texto = pygame.font.Font(font, 40)
         fonte_buttom = pygame.font.Font(font, 10)
+        draw_stars(self.display)
 
         # setando mensagem (posição)
         texto = fonte_texto.render(info, True, (255, 255, 255))
-        pos_texto = texto.get_rect(center=(420, 50))
+        pos_texto = texto.get_rect(center=(SIZE_WINDOW_X//2, 50))
         self.display.blit(texto, pos_texto)
 
        # cria superfície do botão e seta size
         self.button_surface = pygame.Surface((150, 50))
-        self.button_rect = pygame.Rect(190, 190, 150, 50)
+        self.button_rect = pygame.Rect((SIZE_WINDOW_X//2) - 200, (SIZE_WINDOW_Y//2) - 50, 150, 50)
 
         self.button_surface_out = pygame.Surface((150, 50))
-        self.button_rect_out = pygame.Rect(400, 190, 150, 50)
+        self.button_rect_out = pygame.Rect((SIZE_WINDOW_X//2) + 50, (SIZE_WINDOW_Y//2) - 50, 150, 50)
 
         # cria o retângulo do botão e seta cor
         pygame.draw.rect(self.button_surface, (255,255,255), (0, 0, 0, 0), 2)
@@ -36,7 +38,7 @@ class GameOver(pygame.sprite.Sprite):
 
         self.display.blit(fonte_buttom.render('Reiniciar!', True, (255,255,255)), (self.button_rect.centerx - 50, self.button_rect.centery))
         self.display.blit(fonte_buttom.render('Sair!', True, (255,255,255)), (self.button_rect_out.centerx - 50, self.button_rect_out.centery))
-    
+        #self.button_rect.blit(texto_botao, pos_texto_botao)
 
     def getReturnButton(self):
         for event in pygame.event.get():
@@ -45,4 +47,6 @@ class GameOver(pygame.sprite.Sprite):
                     return False
                 if self.button_rect_out.collidepoint(event.pos):
                     pygame.quit()
+            if event.type == pygame.QUIT: 
+                pygame.quit()
         return True
