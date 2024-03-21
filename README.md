@@ -1,35 +1,23 @@
-# Project layout helper and Scripts/Documentations for developing IF817 Course project
+# SpaCIn Launch
+O SpaCIN Launch é um jogo desenvolvido para a disciplina de Interface Hardware-Software. Nele, controlamos um foguete com os botões, switches e LEDs da placa de2i-150.
 
-**REMIDER**: This project layout it's not mandatory! You can feel free to use whatever build system you use for developing a user application. This has only a simple Makefile for people who don't need to setup a complex build system and just want to develop a simple C/C++/Assembly application. BUT be careful with the 'driver' folder, inside it has a Makefile that is vital for building the driver/module and one must not remove it.
+![SpaCIn game](/Screenshots/collage.jpg)
 
-## Content
- - [Useful Commands](docs/commands.md)
+## Como rodar
+1. Passe o mapeamento que está na pasta */map* para a placa utilizando o sofware Quartus;
 
-## Current project tree
+Na pasta */driver/pci* :</br>
+1. Rode o comando ```sudo insmod de2i-150.ko``` para adicionar o módulo;
+3. Rode o comando ```sudo chmod 666 /dev/mydev``` para dar as permissões necessárias;
 
-	.
-	├── src
-	│   └── main.cpp
-	├── include
-	│   ├── display.h
-	│   └── ioctl_cmds.h
-	├── driver
-	│   ├── char
-	│   │   ├── dummy.c
-	│   │   └── Makefile
-	│   └── pci
-	│       ├── de2i-150.c
-	│       └── Makefile
-	├── exemples
-	│   ├── c
-	│   │   ├── app-char.c
-	│   │   └── app-pci.c
-	│   └── python
-	│       ├── app-char.py
-	│       └── app-pci.py
-	├── docs
-	│   └── commands.md
-	├── LICENSE
-	├── Makefile
-	├── README.md
-	└── setup.sh
+Na pasta */SpaCIn* :</br>
+1. Rode o comando ```python3 main.py /dev/mydev``` para iniciar o jogo.
+
+- [Comandos úteis](docs/commands.md)
+
+## Como jogar
+> Obs: Deixe todos os switches "para cima" antes começar a jogar
+- Utilize os botões da placa para movimentar o foguete e desviar do lixo espacial. Se houver uma colisão, você perde o jogo;
+- Os LEDs vermelhos da aplicação começam ligados. Sempre que uma fração do combustível acabar, o que é indicado na aplicação e com o desligamento de um LED, baixe o switch logo abaixo ao LED que apagou;
+- A cada seis switches baixados, aperte o botão de desacoplamento para desacoplar uma parte do foguete;
+- Você ganha o jogo quando desceu todos os switches e desacoplou os três módulos sem colidir com nenhum lixo espacial.
